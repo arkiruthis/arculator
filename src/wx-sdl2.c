@@ -234,37 +234,57 @@ void arc_start_main_thread(void *wx_window, void *wx_menu)
 	quited = 0;
 	pause_main_thread = 0;
 	main_thread_mutex = SDL_CreateMutex();
+	
+#ifdef __APPLE__
+	// On macOS, run directly without creating a thread due to NSWindow issues
+	arc_main_thread(NULL);
+#else
 	main_thread = SDL_CreateThread(arc_main_thread, "Main Thread", (void *)NULL);
+#endif
 }
 
 void arc_stop_main_thread()
 {
 	quited = 1;
+#ifndef __APPLE__
 	SDL_WaitThread(main_thread, NULL);
+#endif
 	SDL_DestroyMutex(main_thread_mutex);
 	main_thread_mutex = NULL;
 }
 
 void arc_pause_main_thread()
 {
+#ifndef __APPLE__
 	SDL_LockMutex(main_thread_mutex);
+#endif
 	pause_main_thread = 1;
+#ifndef __APPLE__
 	SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_resume_main_thread()
 {
+#ifndef __APPLE__
 	SDL_LockMutex(main_thread_mutex);
+#endif
 	pause_main_thread = 0;
+#ifndef __APPLE__
 	SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_do_reset()
 {
 	debugger_start_reset();
+#ifndef __APPLE__
 	SDL_LockMutex(main_thread_mutex);
+#endif
 	arc_reset();
+#ifndef __APPLE__
 	SDL_UnlockMutex(main_thread_mutex);
+#endif
 	debugger_end_reset();
 }
 
