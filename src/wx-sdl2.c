@@ -228,6 +228,45 @@ static int arc_main_thread(void *p)
 	return 0;
 }
 
+#ifdef __APPLE__
+/* On macOS, SDL_CreateWindow must be called from the main thread,
+   so we run arc_main_thread directly instead of in a separate thread */
+void arc_start_main_thread(void *wx_window, void *wx_menu)
+{
+	quited = 0;
+	pause_main_thread = 0;
+	main_thread_mutex = SDL_CreateMutex();
+	arc_main_thread(NULL);
+}
+
+void arc_stop_main_thread()
+{
+	quited = 1;
+	/* No thread to wait for - arc_main_thread runs on main thread */
+	if (main_thread_mutex)
+	{
+		SDL_DestroyMutex(main_thread_mutex);
+		main_thread_mutex = NULL;
+	}
+}
+
+void arc_pause_main_thread()
+{
+	pause_main_thread = 1;
+}
+
+void arc_resume_main_thread()
+{
+	pause_main_thread = 0;
+}
+
+void arc_do_reset()
+{
+	debugger_start_reset();
+	arc_reset();
+	debugger_end_reset();
+}
+#else
 static SDL_Thread *main_thread;
 void arc_start_main_thread(void *wx_window, void *wx_menu)
 {
@@ -267,40 +306,53 @@ void arc_do_reset()
 	SDL_UnlockMutex(main_thread_mutex);
 	debugger_end_reset();
 }
+#endif
 
 void arc_disc_change(int drive, char *fn)
 {
+#ifndef __APPLE__
 	int is_indebug = indebug;
+#endif
 
 	rpclog("arc_disc_change: drive=%i fn=%s\n", drive, fn);
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_LockMutex(main_thread_mutex);
+#endif
 
 	disc_close(drive);
 	strcpy(discname[drive], fn);
 	disc_load(drive, discname[drive]);
 	ioc_discchange(drive);
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_disc_eject(int drive)
 {
+#ifndef __APPLE__
 	int is_indebug = indebug;
+#endif
 
 	rpclog("arc_disc_eject: drive=%i\n", drive);
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_LockMutex(main_thread_mutex);
+#endif
 
 	ioc_discchange(drive);
 	disc_close(drive);
 	discname[drive][0] = 0;
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_renderer_reset()
@@ -310,31 +362,39 @@ void arc_renderer_reset()
 
 void arc_set_display_mode(int new_display_mode)
 {
+#ifndef __APPLE__
 	int is_indebug = indebug;
 
 	if (!is_indebug)
 		SDL_LockMutex(main_thread_mutex);
+#endif
 
 	display_mode = new_display_mode;
 	clearbitmap();
 	setredrawall();
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_set_dblscan(int new_dblscan)
 {
+#ifndef __APPLE__
 	int is_indebug = indebug;
 
 	if (!is_indebug)
 		SDL_LockMutex(main_thread_mutex);
+#endif
 
 	dblscan = new_dblscan;
 	clearbitmap();
 
+#ifndef __APPLE__
 	if (!is_indebug)
 		SDL_UnlockMutex(main_thread_mutex);
+#endif
 }
 
 void arc_set_resizeable()
