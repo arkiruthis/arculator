@@ -44,7 +44,12 @@ static void sdl_disable_mouse_capture()
 	updatemips = 1;
 }
 
+#ifdef __APPLE__
+/* quited is not static on macOS so it can be accessed from wx-app.cc */
+volatile int quited = 0;
+#else
 static volatile int quited = 0;
+#endif
 static volatile int pause_main_thread = 0;
 
 static SDL_mutex *main_thread_mutex = NULL;

@@ -141,10 +141,14 @@ private:
 #endif
 
 	wxMenu* menu;
+#ifdef __APPLE__
+	wxMenuBar* menuBar;
+#endif
 
 	void Quit(bool stop_emulator = 1);
 	void ChangeDisc(int drive);
 	void UpdateMenu(wxMenu *menu);
+	wxMenuItem* FindMenuItem(int id);
 
 	wxDECLARE_EVENT_TABLE();
 };
