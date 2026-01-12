@@ -26,6 +26,12 @@
 #include <string.h>
 
 #include <dirent.h>
+
+/* Macro to silence unused parameter warnings */
+#ifndef NOT_USED
+#define NOT_USED(x) ((void)(x))
+#endif
+
 #ifdef _MSC_VER
 #define PATH_MAX 1024
 #else

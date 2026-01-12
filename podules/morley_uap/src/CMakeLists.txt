@@ -13,5 +13,7 @@ add_podule(morley_uap
         ${CMAKE_SOURCE_DIR}/podules/common/adc
         ${CMAKE_SOURCE_DIR}/podules/common/joystick
         ${CMAKE_SOURCE_DIR}/podules/common/misc
+    LINK_LIBS
+        ${SDL2_LIBRARIES}
 )
 

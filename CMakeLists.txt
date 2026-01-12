@@ -31,6 +31,30 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 endif()
 
+# Disable treating warnings as errors (matches original automake behavior)
+# Modern Clang versions treat some warnings as errors by default
+if(CMAKE_C_COMPILER_ID MATCHES "Clang|GNU")
+    add_compile_options(
+        $<$<COMPILE_LANGUAGE:C>:-Wno-error>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-deprecated-non-prototype>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-incompatible-pointer-types>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-knr-promoted-parameter>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-tautological-constant-out-of-range-compare>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-int-conversion>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-implicit-function-declaration>
+        $<$<COMPILE_LANGUAGE:C>:-Wno-implicit-int>
+    )
+endif()
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wno-error>)
+endif()
+
+# MSVC specific flags
+if(MSVC)
+    add_compile_options(/W3 /WX-)
+endif()
+
 if(ARCULATOR_RELEASE_BUILD)
     add_compile_definitions(RELEASE_BUILD)
 endif()

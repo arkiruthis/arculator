@@ -98,17 +98,55 @@ endif()
 
 # Generate wx-resources.cc from arculator.xrc
 set(WX_RESOURCES_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/wx-resources.cc)
-if(wxWidgets_wxrc_EXECUTABLE)
+
+# Check if wxrc is available (handle both found program and generator expression)
+if(wxWidgets_wxrc_EXECUTABLE AND NOT wxWidgets_wxrc_EXECUTABLE MATCHES "\\$<")
+    # We have an actual path to wxrc
+    if(EXISTS "${wxWidgets_wxrc_EXECUTABLE}")
+        add_custom_command(
+            OUTPUT ${WX_RESOURCES_OUTPUT}
+            COMMAND ${wxWidgets_wxrc_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc -o ${WX_RESOURCES_OUTPUT}
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc
+            COMMENT "Compiling arculator.xrc to C++ source"
+            VERBATIM
+        )
+    else()
+        message(WARNING "wxrc executable not found at ${wxWidgets_wxrc_EXECUTABLE}, generating placeholder")
+        file(WRITE ${WX_RESOURCES_OUTPUT} "// Auto-generated placeholder - wxrc not found\n#include <wx/xrc/xmlres.h>\nvoid InitXmlResource() { wxXmlResource::Get()->InitAllHandlers(); }\n")
+    endif()
+elseif(wxWidgets_wxrc_EXECUTABLE MATCHES "\\$<")
+    # Generator expression - used when building wxWidgets from source
     add_custom_command(
         OUTPUT ${WX_RESOURCES_OUTPUT}
         COMMAND ${wxWidgets_wxrc_EXECUTABLE} -c ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc -o ${WX_RESOURCES_OUTPUT}
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc wxrc
+        COMMENT "Compiling arculator.xrc to C++ source"
+        VERBATIM
+    )
+elseif(TARGET wxrc)
+    # wxrc is a target we built
+    add_custom_command(
+        OUTPUT ${WX_RESOURCES_OUTPUT}
+        COMMAND $<TARGET_FILE:wxrc> -c ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc -o ${WX_RESOURCES_OUTPUT}
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc wxrc
         COMMENT "Compiling arculator.xrc to C++ source"
         VERBATIM
     )
 else()
-    # Fallback: create an empty resource file if wxrc not available
-    file(WRITE ${WX_RESOURCES_OUTPUT} "// Auto-generated placeholder\nvoid InitXmlResource() {}\n")
+    # Fallback: try to find wxrc in PATH
+    find_program(WXRC_PROGRAM wxrc)
+    if(WXRC_PROGRAM)
+        add_custom_command(
+            OUTPUT ${WX_RESOURCES_OUTPUT}
+            COMMAND ${WXRC_PROGRAM} -c ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc -o ${WX_RESOURCES_OUTPUT}
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/arculator.xrc
+            COMMENT "Compiling arculator.xrc to C++ source"
+            VERBATIM
+        )
+    else()
+        message(WARNING "wxrc not available, generating placeholder wx-resources.cc")
+        file(WRITE ${WX_RESOURCES_OUTPUT} "// Auto-generated placeholder - wxrc not found\n#include <wx/xrc/xmlres.h>\nvoid InitXmlResource() { wxXmlResource::Get()->InitAllHandlers(); }\n")
+    endif()
 endif()
 
 list(APPEND ARCULATOR_SOURCES ${WX_RESOURCES_OUTPUT})

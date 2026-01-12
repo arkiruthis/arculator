@@ -1,7 +1,7 @@
 # deps/wxwidgets.cmake - Fetch and configure wxWidgets
 
 # First try to find system wxWidgets
-find_package(wxWidgets QUIET COMPONENTS core base adv)
+find_package(wxWidgets QUIET COMPONENTS core base adv xrc xml)
 
 if(NOT wxWidgets_FOUND)
     message(STATUS "System wxWidgets not found, fetching...")
@@ -32,7 +32,7 @@ if(NOT wxWidgets_FOUND)
         ${wxWidgets_SOURCE_DIR}/include
         ${wxWidgets_BINARY_DIR}/lib/wx/include
     )
-    set(wxWidgets_LIBRARIES wx::core wx::base wx::adv)
+    set(wxWidgets_LIBRARIES wx::core wx::base wx::adv wx::xrc wx::xml)
     set(wxWidgets_FOUND TRUE)
     
     # For wxrc tool

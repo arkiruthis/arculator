@@ -17,6 +17,8 @@ add_podule(aka10
         ${CMAKE_SOURCE_DIR}/podules/common/midi
         ${CMAKE_SOURCE_DIR}/podules/common/misc
         ${CMAKE_SOURCE_DIR}/podules/common/uart
+    LINK_LIBS
+        ${SDL2_LIBRARIES}
 )
 
 if(OS_WINDOWS)
