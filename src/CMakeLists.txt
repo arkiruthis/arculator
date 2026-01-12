@@ -214,6 +214,12 @@ if(OS_MACOSX)
     )
 endif()
 
+# Copy executable to project root after build (temporary until proper install is set up)
+add_custom_command(TARGET arculator POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:arculator> ${CMAKE_SOURCE_DIR}/arculator
+    COMMENT "Copying arculator to project root"
+)
+
 # Install target
 install(TARGETS arculator
     RUNTIME DESTINATION bin
