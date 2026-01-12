@@ -34,3 +34,6 @@ wx-resources.cc
 
 # Dependencies fetched by CMake
 _deps/
+
+# Arculator executable
+arculator
