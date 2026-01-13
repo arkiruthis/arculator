@@ -141,3 +141,28 @@ message(STATUS "Platform: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "Compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
 message(STATUS "")
 
+# Install data directories
+install(DIRECTORY roms/
+    DESTINATION roms
+    PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY hostfs/
+    DESTINATION hostfs
+    PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY cmos/
+    DESTINATION cmos
+    PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY ddnoise/
+    DESTINATION ddnoise
+    PATTERN ".git" EXCLUDE
+)
+
+install(DIRECTORY configs/
+    DESTINATION configs
+    PATTERN ".git" EXCLUDE
+)

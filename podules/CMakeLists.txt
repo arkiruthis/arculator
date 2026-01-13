@@ -89,7 +89,7 @@ function(add_podule NAME)
     # Set output name and properties
     set_target_properties(${NAME} PROPERTIES
         PREFIX ""
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/podules
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/podules/${NAME}
     )
     
     # Platform-specific library extension
@@ -101,9 +101,9 @@ function(add_podule NAME)
         set_target_properties(${NAME} PROPERTIES SUFFIX ".so")
     endif()
     
-    # Install
+    # Install to podules/NAME/ subdirectory
     install(TARGETS ${NAME}
-        LIBRARY DESTINATION lib/podules
+        LIBRARY DESTINATION podules/${NAME}
     )
 endfunction()
 

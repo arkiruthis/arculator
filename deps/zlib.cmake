@@ -26,6 +26,13 @@ if(NOT ZLIB_FOUND)
     
     set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
     set(ZLIB_LIBRARIES zlibstatic)
+    
+    # Install zlib DLL if it was built as a shared library (Windows)
+    if(TARGET zlib AND OS_WINDOWS)
+        install(TARGETS zlib
+            RUNTIME DESTINATION .
+        )
+    endif()
 else()
     message(STATUS "Found system zlib: ${ZLIB_LIBRARIES}")
 endif()

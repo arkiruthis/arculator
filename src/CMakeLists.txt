@@ -214,14 +214,35 @@ if(OS_MACOSX)
     )
 endif()
 
-# Copy executable to project root after build (temporary until proper install is set up)
-add_custom_command(TARGET arculator POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:arculator> ${CMAKE_SOURCE_DIR}/arculator
-    COMMENT "Copying arculator to project root"
-)
-
 # Install target
 install(TARGETS arculator
-    RUNTIME DESTINATION bin
+    RUNTIME DESTINATION .
 )
+
+# Install runtime dependencies (DLLs) on Windows
+if(OS_WINDOWS)
+    # Install GCC runtime DLLs on Windows when using GCC/MinGW
+    if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        # Get the compiler bin directory
+        get_filename_component(COMPILER_DIR "${CMAKE_C_COMPILER}" DIRECTORY)
+        
+        # List of common GCC runtime DLLs
+        set(GCC_RUNTIME_DLLS
+            "libgcc_s_seh-1.dll"
+            "libgcc_s_dw2-1.dll"
+            "libstdc++-6.dll"
+            "libwinpthread-1.dll"
+        )
+        
+        # Find and install each DLL if it exists
+        foreach(DLL_NAME ${GCC_RUNTIME_DLLS})
+            if(EXISTS "${COMPILER_DIR}/${DLL_NAME}")
+                install(FILES "${COMPILER_DIR}/${DLL_NAME}"
+                    DESTINATION .
+                )
+            endif()
+        endforeach()
+    endif()
+endif()
+
 
