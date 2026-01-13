@@ -24,6 +24,9 @@ if(NOT wxWidgets_FOUND)
     # Ensure we get the components we need
     set(wxUSE_STL ON CACHE BOOL "" FORCE)
     set(wxUSE_UNICODE ON CACHE BOOL "" FORCE)
+    # Use UTF-8 for wxString internal storage (allows implicit const char* conversion)
+    set(wxUSE_UNICODE_UTF8 ON CACHE BOOL "" FORCE)
+    set(wxUSE_UNSAFE_WXSTRING_CONV ON CACHE BOOL "" FORCE)
     
     FetchContent_MakeAvailable(wxWidgets)
     
