@@ -63,13 +63,17 @@
             }
         },
         {
-            "name": "vs2022",
-            "displayName": "Visual Studio 2022",
-            "description": "Build using Visual Studio 2022 (Windows)",
-            "generator": "Visual Studio 17 2022",
-            "binaryDir": "${sourceDir}/build-vs2022",
+            "name": "msys2-ucrt64",
+            "displayName": "MSYS2 UCRT64",
+            "description": "Build using MSYS2 UCRT64 toolchain (Windows)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-ucrt64",
             "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
                 "ARCULATOR_BUILD_PODULES": "ON"
+            },
+            "environment": {
+                "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
             }
         }
     ],
@@ -85,6 +89,10 @@
         {
             "name": "release",
             "configurePreset": "release"
+        },
+        {
+            "name": "msys2-ucrt64",
+            "configurePreset": "msys2-ucrt64"
         }
     ]
 }
