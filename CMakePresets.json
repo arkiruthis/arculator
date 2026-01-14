@@ -81,6 +81,22 @@
             "environment": {
                 "PATH": "C:/msys64/ucrt64/bin;$penv{PATH}"
             }
+        },
+        {
+            "name": "msys2-mingw64",
+            "displayName": "MSYS2 MINGW64",
+            "description": "Build using MSYS2 MINGW64 toolchain (Windows)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-mingw64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install",
+                "ARCULATOR_BUILD_PODULES": "ON",
+                "CMAKE_POLICY_VERSION_MINIMUM": "3.5"
+            },
+            "environment": {
+                "PATH": "C:/msys64/mingw64/bin;$penv{PATH}"
+            }
         }
     ],
     "buildPresets": [
@@ -99,6 +115,10 @@
         {
             "name": "msys2-ucrt64",
             "configurePreset": "msys2-ucrt64"
+        },
+        {
+            "name": "msys2-mingw64",
+            "configurePreset": "msys2-mingw64"
         }
     ]
 }
