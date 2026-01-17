@@ -1,6 +1,8 @@
 # Arculator
 
-Arculator is an Acorn Archimedes emulator originally written by **Sarah Walker**. It emulates the Acorn Archimedes series of computers, including models like the A3000, A3010, A3020, A4000, A5000, and more.
+Arculator is an Acorn Archimedes emulator originally written by [Sarah Walker](https://github.com/sarah-walker-pcem). It emulates the Acorn Archimedes series of computers, including models like the A3000, A3010, A3020, A4000, A5000, and more.
+
+⚠️ **This is a fork of the original project but using CMake instead of automake to assist with cross-platform development. <u>It is currently heavily in progress!</u>** ⚠️
 
 The emulator supports:
 - Multiple Archimedes machine types
