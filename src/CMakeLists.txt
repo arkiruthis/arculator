@@ -177,17 +177,12 @@ if(OS_WINDOWS)
         ws2_32
         iphlpapi
     )
-elseif(OS_LINUX)
+elseif(OS_LINUX OR OS_OTHER)
     target_link_libraries(arculator PRIVATE
         ${CMAKE_DL_LIBS}
         ${X11_LIBRARIES}
     )
     target_include_directories(arculator PRIVATE ${X11_INCLUDE_DIR})
-elseif(OS_MACOSX)
-    if(X11_FOUND)
-        target_link_libraries(arculator PRIVATE ${X11_LIBRARIES})
-        target_include_directories(arculator PRIVATE ${X11_INCLUDE_DIRS})
-    endif()
 endif()
 
 # wxWidgets compile definitions and flags

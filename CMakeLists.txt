@@ -93,27 +93,12 @@ include(cmake/dependencies.cmake)
 # Find system libraries
 find_package(Threads REQUIRED)
 
-if(OS_LINUX)
-    find_package(ALSA)
+if(OS_LINUX OR OS_OTHER)
     find_package(X11 REQUIRED)
 endif()
 
-if(OS_MACOSX)
-    find_package(X11)
-    if(NOT X11_FOUND)
-        # Try XQuartz location
-        find_path(X11_INCLUDE_DIR X11/Xlib.h
-            PATHS /opt/X11/include
-        )
-        find_library(X11_LIBRARY X11
-            PATHS /opt/X11/lib
-        )
-        if(X11_INCLUDE_DIR AND X11_LIBRARY)
-            set(X11_FOUND TRUE)
-            set(X11_LIBRARIES ${X11_LIBRARY})
-            set(X11_INCLUDE_DIRS ${X11_INCLUDE_DIR})
-        endif()
-    endif()
+if(OS_LINUX)
+    find_package(ALSA)
 endif()
 
 # Add subdirectories

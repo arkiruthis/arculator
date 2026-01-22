@@ -157,12 +157,6 @@ sudo apt install libgtk-3-dev
 sudo dnf install gtk3-devel
 ```
 
-### X11 errors on macOS
-If you need X11 support on macOS, install XQuartz:
-```bash
-brew install --cask xquartz
-```
-
 ### Permission denied when running
 Make sure the executable has execute permissions:
 ```bash
