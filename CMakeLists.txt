@@ -2,7 +2,7 @@
 # Acorn Archimedes Emulator
 
 cmake_minimum_required(VERSION 3.20)
-project(arculator VERSION 2.2 LANGUAGES C CXX)
+project(arculator VERSION 2.2 LANGUAGES C CXX OBJC)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
