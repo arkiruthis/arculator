@@ -57,7 +57,7 @@ message(STATUS "Adding wxWidgets via CPM...")
 CPMAddPackage(
     NAME wxWidgets
     GITHUB_REPOSITORY wxWidgets/wxWidgets
-    GIT_TAG v3.2.6
+    GIT_TAG v3.2.8
     OPTIONS
         "wxBUILD_SHARED OFF"
         "wxBUILD_SAMPLES OFF"
