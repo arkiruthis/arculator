@@ -2,7 +2,7 @@
 # Acorn Archimedes Emulator
 
 cmake_minimum_required(VERSION 3.20)
-project(arculator VERSION 2.2 LANGUAGES C CXX OBJC)
+project(arculator VERSION 2.2 LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -60,6 +60,7 @@ endif()
 if(APPLE)
     set(OS_MACOSX TRUE)
     add_compile_definitions(OS_MACOSX)
+    enable_language(OBJC)
 elseif(WIN32)
     set(OS_WINDOWS TRUE)
     add_compile_definitions(OS_WINDOWS)
