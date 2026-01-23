@@ -104,11 +104,12 @@ if(OS_LINUX OR OS_MACOSX)
         install(TARGETS SDL2 LIBRARY DESTINATION lib)
     endif()
     
-    # wxWidgets shared libraries - use generator expressions for alias targets
-    set(WX_LIB_TARGETS wx::base wx::core wx::adv wx::xrc wx::xml wx::html)
-    foreach(WX_TARGET ${WX_LIB_TARGETS})
-        if(TARGET ${WX_TARGET})
-            install(FILES $<TARGET_FILE:${WX_TARGET}> DESTINATION lib OPTIONAL)
+    # wxWidgets shared libraries - use install(TARGETS) to get proper SONAME symlinks
+    # wxWidgets uses "wx" prefix for target names (wxbase, wxcore, etc.)
+    set(WX_LIB_TARGETS wxbase wxcore wxadv wxxrc wxxml wxhtml)
+    foreach(WX_LIB ${WX_LIB_TARGETS})
+        if(TARGET ${WX_LIB})
+            install(TARGETS ${WX_LIB} LIBRARY DESTINATION lib)
         endif()
     endforeach()
 endif()
