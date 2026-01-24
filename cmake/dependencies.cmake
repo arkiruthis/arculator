@@ -4,12 +4,12 @@
 # This ensures consistent versions across all build environments.
 #
 # Library build configuration:
-#   - zlib: STATIC (small, no runtime dependency)
+#   - zlib: SHARED (consistency across platforms, avoids PIC issues on Linux)
 #   - SDL2: SHARED (better compatibility, easier updates)
 #   - wxWidgets: SHARED (reduces executable size, standard practice)
 
-# --- zlib (static) ---
-message(STATUS "Adding zlib via CPM (static)...")
+# --- zlib (shared) ---
+message(STATUS "Adding zlib via CPM (shared)...")
 CPMAddPackage(
     NAME zlib
     GITHUB_REPOSITORY madler/zlib
@@ -21,11 +21,19 @@ CPMAddPackage(
 
 # Create alias target for consistency
 if(NOT TARGET ZLIB::ZLIB)
-    add_library(ZLIB::ZLIB ALIAS zlibstatic)
+    add_library(ZLIB::ZLIB ALIAS zlib)
 endif()
 
 set(ZLIB_INCLUDE_DIRS ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-set(ZLIB_LIBRARIES zlibstatic)
+set(ZLIB_LIBRARIES zlib)
+
+# Install zlib shared library
+if(OS_WINDOWS AND TARGET zlib)
+    install(TARGETS zlib RUNTIME DESTINATION .)
+endif()
+if((OS_LINUX OR OS_MACOSX) AND TARGET zlib)
+    install(TARGETS zlib LIBRARY DESTINATION lib)
+endif()
 
 # --- SDL2 (shared) ---
 message(STATUS "Adding SDL2 via CPM (shared)...")
