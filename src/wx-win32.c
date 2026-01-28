@@ -181,6 +181,10 @@ void mainthread(LPVOID param)
 					updatemips = 1;
 					mouse_capture_enable();
 				}
+				else if (e.button.button == SDL_BUTTON_RIGHT && !mousecapture)
+				{
+					arc_popup_menu();
+				}
 			}
 			if (e.type == SDL_WINDOWEVENT)
 			{
