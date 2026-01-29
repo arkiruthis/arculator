@@ -28,6 +28,11 @@ cmake --build build --target install
 
 The executable will be installed into an `install` in the root of this project, with the roms, and podules copied in.
 
+### Platform-Specific Build Guides
+
+- **[Building on macOS/Linux](docs/Building-macOS-Linux.md)** - Guide for building on Unix-like systems
+- **[Building on Windows (MSYS2)](docs/Building-Windows-MSYS2.md)** - Guide for building with MinGW64 or UCRT64 toolchains
+
 ### Available Presets
 
 | Preset | Description |
@@ -37,11 +42,6 @@ The executable will be installed into an `install` in the root of this project, 
 | `no-podules` | Build without podule plugins |
 | `msys2-mingw64` | Build using MSYS2 MINGW64 toolchain (Windows) |
 | `msys2-ucrt64` | Build using MSYS2 UCRT64 toolchain (Windows) |
-
-### Platform-Specific Build Guides
-
-- **[Building on Windows (MSYS2)](docs/Building-Windows-MSYS2.md)** - Guide for building with MinGW64 or UCRT64 toolchains
-- **[Building on macOS/Linux](docs/Building-macOS-Linux.md)** - Guide for building on Unix-like systems
 
 ### Build Options
 
